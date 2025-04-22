@@ -5,9 +5,7 @@ export default function Perfil({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.texto}>Perfil do Usuário</Text>
-      <Button title="Ver Postagens" onPress={() => navigation.navigate('Postagem')} />
-      <Button title="Notificações" onPress={() => navigation.navigate('Notificacoes')} />
-      <Button title="Mensagens" onPress={() => navigation.navigate('Mensagens')} />
+      <Button title="Voltar" onPress={() => navigation.goBack()} />
     </View>
   );
 }

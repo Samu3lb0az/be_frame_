@@ -6,7 +6,8 @@ export default function Login({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.texto}>Tela de Login</Text>
       <Button title="Ir para Cadastro" onPress={() => navigation.navigate('Cadastro')} />
-      <Button title="Entrar" onPress={() => navigation.navigate('Perfil')} />
+      
+      <Button title="Entrar" onPress={() => navigation.replace('Postagem')} />
     </View>
   );
 }
