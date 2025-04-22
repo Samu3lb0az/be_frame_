@@ -8,6 +8,7 @@ import Perfil from '../screens/Perfil';
 import Postagem from '../screens/Postagem';
 import Notificacoes from '../screens/Notificacoes';
 import Mensagens from '../screens/Mensagens';
+import Publicar from '../screens/Publicar'; // 👈 adicionando
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function Route() {
       <Stack.Screen name="Postagem" component={Postagem} />
       <Stack.Screen name="Notificacoes" component={Notificacoes} />
       <Stack.Screen name="Mensagens" component={Mensagens} />
+      <Stack.Screen name="Publicar" component={Publicar} /> 
     </Stack.Navigator>
   );
 }

@@ -1,12 +1,18 @@
 import React from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 export default function BottomTabs({ navigation }) {
   return (
     <View style={styles.container}>
-      <Button title="Perfil" onPress={() => navigation.navigate('Perfil')} />
-      <Button title="Publicar" onPress={() => navigation.navigate('Postagem')} />
-      <Button title="Notificações" onPress={() => navigation.navigate('Notificacoes')} />
+      <TouchableOpacity onPress={() => navigation.navigate('Perfil')}>
+        <Text style={styles.icone}>👤</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Publicar')}>
+        <Text style={styles.icone}>➕</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Notificacoes')}>
+        <Text style={styles.icone}>🔔</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -19,5 +25,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: '#ccc',
     backgroundColor: '#fff'
+  },
+  icone: {
+    fontSize: 28,
   }
 });
