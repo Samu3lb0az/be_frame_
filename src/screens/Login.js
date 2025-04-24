@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { db } from '../../firebaseConfig';
 import { collection, query, where, getDocs } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -18,6 +19,13 @@ export default function Login({ navigation }) {
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+        await AsyncStorage.setItem('usuarioLogado', JSON.stringify({
+          id: userDoc.id,
+          nome: userData.nome,
+          username: userData.username
+        }));
         navigation.replace('Postagem');
       } else {
         Alert.alert('Erro', 'Email ou senha incorretos!');
@@ -30,7 +38,12 @@ export default function Login({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Entrar na Conta</Text>
+      <Image 
+        source={require('../../assets/BeFrame_logo.png')} 
+        style={styles.imagem} 
+      />
+      
+      <Text style={styles.titulo}>Entre na Conta BeFrame!</Text>
 
       <TextInput
         style={styles.input}
@@ -85,5 +98,12 @@ const styles = StyleSheet.create({
     color: '#007bff',
     textAlign: 'center',
     fontSize: 16
+  },
+  imagem: {
+    width: 190,
+    height: 190,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginBottom: 20
   }
 });

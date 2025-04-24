@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, Alert } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, Alert, TouchableOpacity, Image } from 'react-native';
 import { db } from '../../firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign } from '@expo/vector-icons'; // Ícone de voltar
 
 export default function Cadastro({ navigation }) {
   const [nome, setNome] = useState('');
@@ -16,12 +18,19 @@ export default function Cadastro({ navigation }) {
     }
 
     try {
-      await addDoc(collection(db, 'usuarios'), {
+      const docRef = await addDoc(collection(db, 'usuarios'), {
         nome,
         email,
         senha,
         username
       });
+
+      await AsyncStorage.setItem('usuarioLogado', JSON.stringify({
+        id: docRef.id,
+        nome,
+        username
+      }));
+
       Alert.alert('Sucesso', `Bem-vindo, ${nome}!`);
       navigation.replace('Postagem');
     } catch (error) {
@@ -32,7 +41,17 @@ export default function Cadastro({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titulo}>Criar Conta</Text>
+      <TouchableOpacity style={styles.voltarButton} onPress={() => navigation.goBack()}>
+        <AntDesign name="arrowleft" size={24} color="#000" />
+        <Text style={styles.voltarText}>Voltar</Text>
+      </TouchableOpacity>
+
+      <Image 
+        source={require('../../assets/BeFrame_logo.png')} 
+        style={styles.imagem} 
+      />
+
+      <Text style={styles.titulo}>Crie sua conta BeFrame</Text>
 
       <TextInput style={styles.input} placeholder="Nome completo" placeholderTextColor="#999" value={nome} onChangeText={setNome} />
       <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#999" keyboardType="email-address" autoCapitalize="none" value={email} onChangeText={setEmail} />
@@ -51,6 +70,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#f5f5f5'
   },
+  voltarButton: {
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  voltarText: {
+    marginLeft: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000'
+  },
   titulo: {
     fontSize: 26,
     fontWeight: 'bold',
@@ -64,5 +96,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
     elevation: 2
+  },
+  imagem: {
+    width: 180,
+    height: 180,
+    resizeMode: 'contain',
+    alignSelf: 'center',
+    marginBottom: 20
   }
 });
