@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { db } from '../../firebaseConfig';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const handleLogin = () => {
-    // Aqui entraria a lógica real de autenticação
-    if (email && senha) {
-      navigation.replace('Postagem');
-    } else {
-      alert('Preencha todos os campos!');
+  const handleLogin = async () => {
+    if (!email || !senha) {
+      Alert.alert('Atenção', 'Preencha todos os campos!');
+      return;
+    }
+
+    try {
+      const q = query(collection(db, 'usuarios'), where('email', '==', email), where('senha', '==', senha));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        navigation.replace('Postagem');
+      } else {
+        Alert.alert('Erro', 'Email ou senha incorretos!');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Problema ao fazer login. Tente novamente.');
+      console.error("Erro no login:", error);
     }
   };
 
